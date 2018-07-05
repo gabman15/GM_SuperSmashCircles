@@ -11,6 +11,9 @@
 -- https://github.com/vrld/hump/blob/master/class.lua
 Class = require 'class'
 
+-- Requires Circle class
+require 'Circle'
+
 -- Size of the window
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -30,7 +33,7 @@ function love.load()
         resizable = true
     })
 
-
+    player1 = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
 
     gameState = SETUP
 end
@@ -38,6 +41,8 @@ end
 function love.draw()
     if(gameState == SETUP)
         love.graphics.printf("SUPER SMASH CIRCLES", 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, "center")
+
+        love.graphics.printf()
     end
-    
+
 end

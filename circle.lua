@@ -21,14 +21,20 @@ function Circle:init(x, y)
     -- Speed of Circle
     self.dy = 0
     self.dx = 0
+
+    --Whether the circle is alive
+    self.living = true
 end
 
 function Circle:setType(type)
     self.type = type
 end
 
-function Circle:reset(x, y)
+function Circle:die(x, y)
     self.x = x
     self.y = y
     lives = lives - 1
+    if(lives == 0)
+        living = false
+    end
 end
