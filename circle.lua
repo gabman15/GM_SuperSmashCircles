@@ -1,19 +1,20 @@
 -- Circle class for each player
 
-Circle = Class{}
+Circle = class()
 
 -- Character Types
 RED = 0
 PINK = 1
 
-function Circle:init(x, y)
+function Circle:init(x, y, controls)
     self.x = x
     self.y = y
     self.width = 30
     self.height = 30
+    self.controls = controls
     
     -- Default type is 0 (Red)
-    self.type = RED
+    self.char = RED
 
     -- Lives of the character (default starts at 5)
     self.lives = 5
@@ -26,15 +27,14 @@ function Circle:init(x, y)
     self.living = true
 end
 
-function Circle:setType(type)
-    self.type = type
+function Circle:setType(char)
+    self.char = char
 end
 
-function Circle:die(x, y)
-    self.x = x
-    self.y = y
-    lives = lives - 1
-    if(lives == 0)
+function Circle:die()
+    
+    self.set(lives, lives - 1)
+    if lives == 0 then
         living = false
     end
 end
