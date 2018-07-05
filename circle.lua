@@ -2,20 +2,18 @@
 
 Circle = Class{}
 
+-- Character Types
+RED = 0
+PINK = 1
+
 function Circle:init(x, y)
     self.x = x
     self.y = y
     self.width = 30
     self.height = 30
-    --[[ Which type of character the circle is
-        0 - Red
-        1 - Pink
-
-        BETA
-        probably different names for characters and there will be more characters
-    ]]
+    
     -- Default type is 0 (Red)
-    self.type = 0
+    self.type = RED
 
     -- Lives of the character (default starts at 5)
     self.lives = 5

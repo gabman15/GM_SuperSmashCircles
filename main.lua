@@ -29,13 +29,15 @@ function love.load()
         fullscreen = false,
         resizable = true
     })
-    
-    players = {}
+
+
 
     gameState = SETUP
 end
 
 function love.draw()
-    love.graphics.print(GRAVITY, WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
-
+    if(gameState == SETUP)
+        love.graphics.printf("SUPER SMASH CIRCLES", 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, "center")
+    end
+    
 end
