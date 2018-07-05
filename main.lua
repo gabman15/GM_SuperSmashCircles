@@ -15,6 +15,11 @@ Class = require 'class'
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
+-- Game States
+SETUP = 0
+PLAYING = 1
+OVER = 2
+
 -- Gravity within game
 GRAVITY = 0.3
 
@@ -25,7 +30,9 @@ function love.load()
         resizable = true
     })
     
-    
+    players = {}
+
+    gameState = SETUP
 end
 
 function love.draw()
