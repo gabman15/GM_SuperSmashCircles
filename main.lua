@@ -24,7 +24,8 @@ PLAYING = 1
 OVER = 2
 
 -- Gravity within game
-GRAVITY = 0.3
+YGRAVITY = 5
+XGRAVITY = 0.035
 
 function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -62,11 +63,63 @@ function love.load()
     }
 
     --PLAYERS (DEV TEST)
-    player1 = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, LEFT_KEYBOARD)
-    player2 = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, RIGHT_KEYBOARD)
+    players = {
+        [1] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, LEFT_KEYBOARD),
+        [2] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, RIGHT_KEYBOARD)
+    }
 
     love.graphics.AlignMode = 'center'
     gameState = SETUP
+    love.keyboard.keysPressed = {}
+end
+
+function love.update(dt)
+    if gameState == SETUP then
+        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+            gameState = PLAYING
+        end
+    elseif gameState == PLAYING then
+        for i = 1, table.maxn(players), 1 do
+            players[i]:update(dt)
+            
+            for _, value in pairs(players[i].controls) do
+                if love.keyboard.isDown(value) then
+                    players[i]:action(value)
+                end
+            end
+        end
+
+        
+    end
+
+    love.keyboard.keysPressed = {}
+end
+
+function love.keypressed(key)
+    if (key == 'escape') then
+        love.event.quit()
+    end
+
+    love.keyboard.keysPressed[key] = true
+end
+
+function love.keyreleased(key)
+    if gameState == PLAYING then
+        for i = 1, table.maxn(players), 1 do
+            if(players[i].controls["up"] == key) then
+                players[i].canJump = true
+            end
+        end
+    end
+end
+
+
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
+    end
 end
 
 function love.draw()
@@ -76,15 +129,24 @@ function love.draw()
     if gameState == SETUP then
         love.graphics.setFont(largeFont)
         love.graphics.printf("SUPER SMASH CIRCLES", 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, "center")
-        love.graphics.setFont(smallFont)
-        love.graphics.printf("PLAYER 1: \n" .. player1.lives, -500, 50, WINDOW_WIDTH, 'center')
+        love.graphics.printf("Press Enter to play!", 0, WINDOW_HEIGHT / 2 + 100, WINDOW_WIDTH, "center")
         
-        love.graphics.printf("PLAYER 2: \n" .. player2.lives, 500, 50, WINDOW_WIDTH, 'center')
-        --player2.die(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
-        love.graphics.printf("PLAYER 2: \n" .. player2.lives, 500, 600, WINDOW_WIDTH, 'center')
-
-        love.graphics.setColor(255,0,0)
-        love.graphics.circle('fill', player1.x, player1.y, player1.width)
+    elseif gameState == PLAYING then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf("PLAYER 1: \n" .. players[1].lives, -500, 50, WINDOW_WIDTH, 'center')
+        
+        love.graphics.printf("PLAYER 2: \n" .. players[2].lives, 500, 50, WINDOW_WIDTH, 'center')
+        for i = 1, table.maxn(players), 1 do
+            players[i]:render()
+        end
     end
+end
 
+function table.contains(table, element)
+    for _, value in pairs(table) do
+      if value == element then
+        return true
+      end
+    end
+    return false
 end
