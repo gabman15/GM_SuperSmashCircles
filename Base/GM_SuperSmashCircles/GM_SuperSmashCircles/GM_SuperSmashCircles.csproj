@@ -45,6 +45,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ContentManager.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EventEmitter.cs" />
     <Compile Include="Game1.cs" />

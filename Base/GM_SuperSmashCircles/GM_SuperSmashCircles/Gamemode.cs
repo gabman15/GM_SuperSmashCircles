@@ -20,6 +20,7 @@ namespace GM_SuperSmashCircles
         {
             //game is done
             //idk what to put here for now
+            //maybe this just shouldn't be a thing
         }
         public static Gamemode LoadFromFile(string filename, Game1 game)
         {

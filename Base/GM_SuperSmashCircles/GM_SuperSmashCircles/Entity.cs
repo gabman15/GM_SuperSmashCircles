@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLua;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 
 namespace GM_SuperSmashCircles
 {
@@ -50,6 +52,15 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public Lua State { get; set; }
         /// <summary>
+        /// the image of this entity
+        /// </summary>
+        public Texture2D Image { get; set; }
+        private string imageName { get; set; }
+        /// <summary>
+        /// color of this entity
+        /// </summary>
+        public Color Color;
+        /// <summary>
         /// constructs an entity with default values
         /// </summary>
         public Entity()
@@ -64,6 +75,10 @@ namespace GM_SuperSmashCircles
             OnUpdate = null;
             OnCollision = null;
             State = new Lua();
+            Image = null;
+            imageName = "";
+            Color = new Color(255, 255, 255);
+            //Color.R = (byte)0;
         }
         /// <summary>
         /// constructs an entity
@@ -80,6 +95,34 @@ namespace GM_SuperSmashCircles
             Width = w;
             Height = h;
             RepelAmount = ra;
+        }
+        /// <summary>
+        /// sets the image from the content manager (likely used from lua code)
+        /// </summary>
+        /// <param name="name">key of the image in the content manager</param>
+        public void SetImage(string name)
+        {
+            Texture2D image = ContentManager.GetContent(name);
+            if (image != null)
+            {
+                Image = image;
+            }
+            imageName = name;
+        }
+        public void SetColor(int r, int g, int b)
+        {
+            Color.R = (byte)r;
+            Color.B = (byte)b;
+            Color.G = (byte)g;
+        }
+        public void Draw(SpriteBatch sb)
+        {
+            if(Image == null)
+            {
+                Image = ContentManager.GetContent(imageName);
+            }
+            if (Image == null) return;
+            sb.Draw(Image, new Rectangle((int)X, (int)Y, (int)Width, (int)Height), Color);
         }
         /// <summary>
         /// loads an entity from a file
