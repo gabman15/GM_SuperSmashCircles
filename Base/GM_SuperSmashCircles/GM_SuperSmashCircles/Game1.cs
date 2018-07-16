@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 
 namespace GM_SuperSmashCircles
 {
@@ -10,13 +12,18 @@ namespace GM_SuperSmashCircles
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
 
         //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
         //public static extern int SDL_GameControllerAddMapping(string mappingString);
-        
+        public List<Entity> Entities { get; set; }
+        //public List<User> Users { get; set; }
+        //public List<Platform> Platforms { get; set; }
+        public Gamemode CurrentGamemode { get; set; }
 
+        public double Gravity { get; set; }
+        
         public Game1()
         {
             GamePad.InitDatabase();
@@ -35,7 +42,17 @@ namespace GM_SuperSmashCircles
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            /*
+            Entity testentity = Entity.LoadFromFile("testentity.lua");
+            testentity.OnCollision.Call();
+            testentity.OnUpdate.Call();
+            Console.WriteLine("{0} {1} {2} {3} {4}", testentity.X, testentity.Y, testentity.Width, testentity.Height, testentity.RepelAmount);*/
+            //Gamemode gamemode = Gamemode.LoadFromFile("testgamemode.lua");
 
+            Gravity = 0;
+
+            Entities = new List<Entity>();
+            CurrentGamemode = Gamemode.LoadFromFile("gamemode_default.lua", this);
             base.Initialize();
         }
 
@@ -70,7 +87,13 @@ namespace GM_SuperSmashCircles
             if (GamePad.GetState(PlayerIndex.Four).Buttons.B == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            foreach(Entity e in Entities)
+            {
+                e.OnUpdate?.Call();
+                e.DY += Gravity; //might want to do gravity differently in the future
+                //collision checking here maybe, although it might need to be somewhere else
+            }
+            CurrentGamemode.OnUpdate?.Call();
 
             base.Update(gameTime);
         }
@@ -86,6 +109,11 @@ namespace GM_SuperSmashCircles
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        public void CreateEntity(string filename)
+        {
+            Entities.Add(Entity.LoadFromFile(filename, this));
         }
     }
 }
