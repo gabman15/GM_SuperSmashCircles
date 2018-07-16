@@ -36,14 +36,17 @@ function love.load()
 
     love.window.setTitle("Super Smash Circles")
 
+
     print("test")
     --FONTS
     smallFont = love.graphics.newFont(20)
     largeFont = love.graphics.newFont(50)
 
+    love.joystick.loadGamepadMappings("/controls/gamecontrollerdb.txt")
+
     --CONTROLS
     LEFT_KEYBOARD = {
-        ['jump'] = 'w',
+        ['jump'] = 'space',
         ['up'] = 'w',
         ['down'] = 's',
         ['left'] = 'a',
@@ -53,7 +56,7 @@ function love.load()
     }
 
     RIGHT_KEYBOARD = {
-        ['jump'] = 'up',
+        ['jump'] = '*',
         ['up'] = 'up',
         ['down'] = 'down',
         ['left'] = 'left',
@@ -62,11 +65,40 @@ function love.load()
         ['special'] = '-'
     }
 
+    XBOX = {
+        ['jump'] = 'x',
+        ['up'] = 'dpup',
+        ['down'] = 'dpdown',
+        ['left'] = 'dpleft',
+        ['right'] = 'dpright',
+        ['dash'] = 'a',
+        ['special'] = 'b'
+    }
+
+    GAMECUBE = {
+        ['jump'] = 'x',
+        ['up'] = 'dpup',
+        ['down'] = 'dpdown',
+        ['left'] = 'dpleft',
+        ['right'] = 'dpright',
+        ['dash'] = 'a',
+        ['special'] = 'b'
+
+    }
+
+    
+
+    joysticks = love.joystick.getJoysticks()
+
     --PLAYERS (DEV TEST)
     players = {
-        [1] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, LEFT_KEYBOARD),
+        [1] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, XBOX, joysticks[4]),
         [2] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, RIGHT_KEYBOARD)
     }
+
+    if(players[1].joystick:getName() == 'MAYFLASH GameCube Controller Adapter') then
+        love.joystick.setGamepadMapping(players[1].joystick:getGUID(), 'x', 'button', 1)
+    end
 
     love.graphics.AlignMode = 'center'
     gameState = SETUP
@@ -83,8 +115,20 @@ function love.update(dt)
             players[i]:update(dt)
             
             for _, value in pairs(players[i].controls) do
-                if love.keyboard.isDown(value) then
-                    players[i]:action(value)
+                if players[i].joystick ~= null then
+                    if players[i].joystick:isGamepad() then
+                        if players[i].joystick:isGamepadDown(value) then
+                            players[i]:action(value)
+                        end
+                    else
+                        if players[i].joystick:isDown(value) then
+                            players[i]:action(value)
+                        end
+                    end
+                else
+                    if love.keyboard.isDown(value) then
+                        players[i]:action(value)
+                    end
                 end
             end
         end
@@ -106,7 +150,30 @@ end
 function love.keyreleased(key)
     if gameState == PLAYING then
         for i = 1, table.maxn(players), 1 do
-            if(players[i].controls["up"] == key) then
+            if(players[i].controls["jump"] == key) then
+                players[i].canJump = true
+            end
+        end
+    end
+end
+
+function love.joystickreleased(joystick, button)
+    print("Joystick "..joystick:getName().." released "..button)
+    if gameState == PLAYING then
+        for i = 1, table.maxn(players), 1 do
+            print(players[i].controls['jump'])
+            if players[i].joystick == joystick and players[i].controls["jump"] == button then
+                players[i].canJump = true
+            end
+        end
+    end
+end
+
+function love.gamepadreleased(joystick, button)
+    print("Joystick "..joystick:getName().." released "..button)
+    if gameState == PLAYING then
+        for i = 1, table.maxn(players), 1 do
+            if players[i].joystick == joystick and players[i].controls["jump"] == button then
                 players[i].canJump = true
             end
         end
@@ -130,12 +197,17 @@ function love.draw()
         love.graphics.setFont(largeFont)
         love.graphics.printf("SUPER SMASH CIRCLES", 0, WINDOW_HEIGHT / 2, WINDOW_WIDTH, "center")
         love.graphics.printf("Press Enter to play!", 0, WINDOW_HEIGHT / 2 + 100, WINDOW_WIDTH, "center")
+        love.graphics.setFont(smallFont)
+        love.graphics.print("JOYSTICKS:", 100,100)
+        for i = 1, table.maxn(joysticks), 1 do
+            love.graphics.print(joysticks[i]:getName(), 100,100 + 100*i)
+        end
         
     elseif gameState == PLAYING then
         love.graphics.setFont(smallFont)
-        love.graphics.printf("PLAYER 1: \n" .. players[1].lives, -500, 50, WINDOW_WIDTH, 'center')
+        love.graphics.printf("PLAYER 1: \n" .. players[1]:isJumping(), -500, 50, WINDOW_WIDTH, 'center')
         
-        love.graphics.printf("PLAYER 2: \n" .. players[2].lives, 500, 50, WINDOW_WIDTH, 'center')
+        love.graphics.printf("PLAYER 2: \n" .. players[1].jumps, 500, 50, WINDOW_WIDTH, 'center')
         for i = 1, table.maxn(players), 1 do
             players[i]:render()
         end

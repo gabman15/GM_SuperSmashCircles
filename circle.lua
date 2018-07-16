@@ -32,6 +32,34 @@ function Circle:init(x, y, controls)
     self.timer = 0
 end
 
+function Circle:init(x, y, controls, joystick)
+    self.x = x
+    self.y = y
+    self.width = 30
+    self.height = 30
+    self.controls = controls
+    self.joystick = joystick
+    
+    --Number of Jumps circle has
+    self.jumps = 2
+    self.jumping = false
+    self.canJump = true
+    -- Default type is 0 (Red)
+    self.char = RED
+
+    -- Lives of the character (default starts at 5)
+    self.lives = 5
+
+    -- Speed of Circle
+    self.dy = 0
+    self.dx = 0
+
+    --Whether the circle is alive
+    self.living = true
+
+    self.timer = 0
+end
+
 function Circle:setType(char)
     self:init()
     self.char = char
@@ -62,22 +90,17 @@ function Circle:update(dt)
         self:die()
     end
 
-    --[[if(self.jumping) and (self.jumps > 0) then
-        self.dy = math.min(- 250, self.dy - 250)
-        self.jumps = self.jumps - 1
-    end
-    self.jumping = false]]
     self.dy = self.dy + YGRAVITY
 end
 
 function Circle:action(key)
     if(self.living) then
-        if key == self.controls['up'] and self.canJump and not self.jumping and self.jumps > 0 and self.timer == 0 then
+        if key == self.controls['jump'] and self.canJump and not self.jumping and self.jumps > 0 and self.timer == 0 then
             self.dy = math.min(- 250, self.dy - 250)
             self.jumps = self.jumps - 1
             self.jumping = true
             self.timer = 15
-            self.canJump = false
+            --self.canJump = false
         elseif(key == self.controls['left']) then
             self.dx = self.dx - 30
         elseif(key == self.controls['right']) then
@@ -88,7 +111,7 @@ function Circle:action(key)
     end
 end
 
-function Circle:isjumping()
+function Circle:isJumping()
     if(self.jumping) then
         return "true"
     end
