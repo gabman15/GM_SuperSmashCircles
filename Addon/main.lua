@@ -42,7 +42,8 @@ function love.load()
     smallFont = love.graphics.newFont(20)
     largeFont = love.graphics.newFont(50)
 
-    love.joystick.loadGamepadMappings("/controls/gamecontrollerdb.txt")
+    love.joystick.loadGamepadMappings("/gamepad-tool/gamecontrollerdb.txt")
+	love.joystick.loadGamepadMappings("/gamepad-tool/gamecube.txt")
 
     --CONTROLS
     LEFT_KEYBOARD = {
@@ -92,13 +93,13 @@ function love.load()
 
     --PLAYERS (DEV TEST)
     players = {
-        [1] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, XBOX, joysticks[4]),
+        [1] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, GAMECUBE, joysticks[2]),
         [2] = Circle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, RIGHT_KEYBOARD)
     }
 
-    if(players[1].joystick:getName() == 'MAYFLASH GameCube Controller Adapter') then
-        love.joystick.setGamepadMapping(players[1].joystick:getGUID(), 'x', 'button', 1)
-    end
+    --if(players[1].joystick:getName() == 'MAYFLASH GameCube Controller Adapter') then
+    --    love.joystick.setGamepadMapping(players[1].joystick:getGUID(), 'x', 'button', 1)
+    --end
 
     love.graphics.AlignMode = 'center'
     gameState = SETUP
