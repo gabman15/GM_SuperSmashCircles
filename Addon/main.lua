@@ -77,7 +77,6 @@ function love.load()
     }
 
     GAMECUBE = {
-        ['jump'] = 'x',
         ['jump'] = 'y',
         ['up'] = 'dpup',
         ['down'] = 'dpdown',

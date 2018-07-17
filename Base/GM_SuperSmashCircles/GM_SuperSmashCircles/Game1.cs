@@ -15,7 +15,6 @@ namespace GM_SuperSmashCircles
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        
 
         private bool firstStep;
 
@@ -29,15 +28,12 @@ namespace GM_SuperSmashCircles
         public double XGravity { get; set; }
         public double YGravity { get; set; }
         public double CollisionPrecision { get; set; }
-        
-        public int CollisionPrecision { get; set; }
         public Game1()
         {
             GamePad.InitDatabase();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Debug.WriteLine(Joystick.GetState(1).IsConnected);
-            
 
         }
 
@@ -112,7 +108,6 @@ namespace GM_SuperSmashCircles
                 e.OnUpdate?.Call();
                 e.DX += XGravity;
                 e.DY += YGravity;
-                //collision checking here maybe, although it might need to be somewhere else
             }
 
             
