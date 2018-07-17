@@ -26,7 +26,7 @@ namespace GM_SuperSmashCircles
 
         public double XGravity { get; set; }
         public double YGravity { get; set; }
-        public int CollisionPrecision { get; set; }
+        public double CollisionPrecision { get; set; }
         
         public Game1()
         {
@@ -117,12 +117,9 @@ namespace GM_SuperSmashCircles
                 //test for collisions with each platform
                 //we only care about downward collisions since these are platforms
                 bool foundCollision = false;
-                Rectangle eRect = e.GetRectangle();
                 foreach(Platform p in Platforms)
                 {
-                    Rectangle pRect = p.GetRectangle();
-                    Rectangle newRect = new Rectangle(eRect.X, eRect.Y, eRect.Width, eRect.Height + (int)e.DY);
-                    while (pRect.Intersects(newRect))
+                    while (RectangleInRectangle(e.X, e.Y, e.X + e.Width, e.Y + e.Height + e.DY, p.X, p.Y, p.X + p.Width, p.Y + p.Height))
                     {
                         foundCollision = true;
                         e.DY -= CollisionPrecision;
@@ -131,7 +128,6 @@ namespace GM_SuperSmashCircles
                             e.DY = 0;
                             break;
                         }
-                        newRect = new Rectangle(eRect.X, eRect.Y, eRect.Width, eRect.Height + (int)e.DY);
                     }
                     
                 }
@@ -172,7 +168,35 @@ namespace GM_SuperSmashCircles
 
             base.Draw(gameTime);
         }
-
+        public bool RectangleInRectangle(double ax1, double ay1, double ax2, double ay2, double bx1, double by1, double bx2, double by2)
+        {
+            //make sure the 1s are top left corner, and the 2s are bottom right corner of their corresponding rectangles
+            if(ax1 > ax2)
+            {
+                double tmp = ax1;
+                ax1 = ax2;
+                ax2 = tmp;
+            }
+            if(ay1 > ay2)
+            {
+                double tmp = ay1;
+                ay1 = ay2;
+                ay2 = tmp;
+            }
+            if(bx1 > bx2)
+            {
+                double tmp = bx1;
+                bx1 = bx2;
+                bx2 = tmp;
+            }
+            if(by1 > by2)
+            {
+                double tmp = by1;
+                by1 = by2;
+                by2 = tmp;
+            }
+            return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
+        }
         public Entity CreateEntity(string filename)
         {
             Entity entity = Entity.LoadFromFile(filename, this);
@@ -184,6 +208,17 @@ namespace GM_SuperSmashCircles
             Platform platform = Platform.LoadFromFile(filename, this);
             Platforms.Add(platform);
             return platform;
+        }
+        public bool CheckCollision(double x1, double y1, double x2, double y2)
+        {
+            foreach (Platform p in Platforms)
+            {
+                if (RectangleInRectangle(x1, y1, x2, y2, p.X, p.Y, p.X + p.Width, p.Y + p.Height))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

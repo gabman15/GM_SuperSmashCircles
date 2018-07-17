@@ -16,6 +16,11 @@ function OnCollision()
 	Console.WriteLine("collision")
 end
 function OnUpdate()
+--	if entity:OnGround() == true then
+--		Console.WriteLine("on ground")
+--	else
+--		Console.WriteLine("flying through the air");
+--	end
 	entity.X = entity.X + entity.DX
 	entity.Y = entity.Y + entity.DY
 end
