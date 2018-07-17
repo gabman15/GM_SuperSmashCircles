@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 
+
 namespace GM_SuperSmashCircles
 {
     /// <summary>
@@ -15,6 +16,7 @@ namespace GM_SuperSmashCircles
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         
+
         private bool firstStep;
 
         //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
@@ -28,6 +30,7 @@ namespace GM_SuperSmashCircles
         public double YGravity { get; set; }
         public double CollisionPrecision { get; set; }
         
+        public int CollisionPrecision { get; set; }
         public Game1()
         {
             GamePad.InitDatabase();
@@ -35,6 +38,7 @@ namespace GM_SuperSmashCircles
             Content.RootDirectory = "Content";
             Debug.WriteLine(Joystick.GetState(1).IsConnected);
             
+
         }
 
         /// <summary>
