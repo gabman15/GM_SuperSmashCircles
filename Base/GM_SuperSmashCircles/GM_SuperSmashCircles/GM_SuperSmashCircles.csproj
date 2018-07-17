@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContentManager.cs" />
+    <Compile Include="Platform.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EventEmitter.cs" />
     <Compile Include="Game1.cs" />
@@ -119,6 +120,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <None Include="testplatform.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="testentity.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

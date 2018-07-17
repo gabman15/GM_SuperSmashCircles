@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace GM_SuperSmashCircles
 {
-    public class Entity
+    public class Platform
     {
         /// <summary>
         /// x position
@@ -20,14 +20,6 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public double Y { get; set; }
         /// <summary>
-        /// x velocity
-        /// </summary>
-        public double DX { get; set; }
-        /// <summary>
-        /// y velocity
-        /// </summary>
-        public double DY { get; set; }
-        /// <summary>
         /// width
         /// </summary>
         public double Width { get; set; }
@@ -36,21 +28,13 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public double Height { get; set; }
         /// <summary>
-        /// the amount this entity repels other entities
-        /// </summary>
-        public double RepelAmount { get; set; }
-        /// <summary>
         /// lua function to be called on update
         /// </summary>
         public LuaFunction OnUpdate { get; set; }
         /// <summary>
         /// lua function to be called on collision
         /// </summary>
-        public LuaFunction OnEntityCollision { get; set; }
-        /// <summary>
-        /// lua function to be called on collision
-        /// </summary>
-        public LuaFunction OnSolidCollision { get; set; }
+        public LuaFunction OnCollision { get; set; }
         /// <summary>
         /// the lua state for this entity
         /// </summary>
@@ -65,33 +49,20 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public Color Color;
         /// <summary>
-        /// whether this entity will collide with platforms
-        /// </summary>
-        public bool CollideWithPlatforms { get; set; }
-        /// <summary>
-        /// whether this entity will collide with other entities
-        /// </summary>
-        public bool CollideWithEntities { get; set; }
-        /// <summary>
         /// constructs an entity with default values
         /// </summary>
-        public Entity()
+        public Platform()
         {
             X = 0;
             Y = 0;
-            DX = 0;
-            DY = 0;
             Width = 0;
             Height = 0;
-            RepelAmount = 0;
             OnUpdate = null;
-            OnEntityCollision = null;
-            OnSolidCollision = null;
+            OnCollision = null;
             State = new Lua();
             Image = null;
             imageName = "";
             Color = new Color(255, 255, 255);
-            CollideWithPlatforms = true;
         }
         /// <summary>
         /// constructs an entity
@@ -101,13 +72,12 @@ namespace GM_SuperSmashCircles
         /// <param name="w">width</param>
         /// <param name="h">height</param>
         /// <param name="ra">repel amount</param>
-        public Entity(double x, double y, double w, double h, double ra) : base()
+        public Platform(double x, double y, double w, double h, double ra) : base()
         {
             X = x;
             Y = y;
             Width = w;
             Height = h;
-            RepelAmount = ra;
         }
         /// <summary>
         /// sets the image from the content manager (likely used from lua code)
@@ -122,30 +92,16 @@ namespace GM_SuperSmashCircles
             }
             imageName = name;
         }
-        /// <summary>
-        /// sets the color of this entity
-        /// </summary>
-        /// <param name="r">red value</param>
-        /// <param name="g">green value</param>
-        /// <param name="b">blue value</param>
         public void SetColor(int r, int g, int b)
         {
             Color.R = (byte)r;
             Color.B = (byte)b;
             Color.G = (byte)g;
         }
-        /// <summary>
-        /// gets the rectangle for this entity
-        /// </summary>
-        /// <returns>the rectangle for this entity</returns>
         public Rectangle GetRectangle()
         {
             return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
         }
-        /// <summary>
-        /// draws this entity
-        /// </summary>
-        /// <param name="sb">the game's sprite batch</param>
         public void Draw(SpriteBatch sb)
         {
             if(Image == null)
@@ -159,17 +115,16 @@ namespace GM_SuperSmashCircles
         /// loads an entity from a file
         /// </summary>
         /// <param name="filename">lua file name</param>
-        /// <returns>the entity from the file</returns>
-        public static Entity LoadFromFile(string filename, Game1 game)
+        /// <returns>the platform from the file</returns>
+        public static Platform LoadFromFile(string filename, Game1 game)
         {
-            Entity entity = new Entity();
-            entity.State.LoadCLRPackage();
-            entity.State.DoFile(filename);
-            entity.State.GetFunction("OnCreation")?.Call(entity, game);
-            entity.OnUpdate = entity.State.GetFunction("OnUpdate");
-            entity.OnEntityCollision = entity.State.GetFunction("OnEntityCollision");
-            entity.OnSolidCollision = entity.State.GetFunction("OnSolidCollision");
-            return entity;
+            Platform platform = new Platform();
+            platform.State.LoadCLRPackage();
+            platform.State.DoFile(filename);
+            platform.State.GetFunction("OnCreation")?.Call(platform, game);
+            platform.OnUpdate = platform.State.GetFunction("OnUpdate");
+            platform.OnCollision = platform.State.GetFunction("OnCollision");
+            return platform;
         }
     }
 }
