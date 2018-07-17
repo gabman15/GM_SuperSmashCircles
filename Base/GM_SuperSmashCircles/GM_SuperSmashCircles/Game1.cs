@@ -15,14 +15,11 @@ namespace GM_SuperSmashCircles
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        
+
         private bool firstStep;
 
-        //[DllImport("SDL2.dll", CallingConvention= CallingConvention.Cdecl)]
+        //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
         //public static extern int SDL_GameControllerAddMapping(string mappingString);
-<<<<<<< HEAD
-        
-=======
         public List<Entity> Entities { get; set; }
         //public List<User> Users { get; set; }
         public List<Platform> Platforms { get; set; }
@@ -31,17 +28,14 @@ namespace GM_SuperSmashCircles
         public double XGravity { get; set; }
         public double YGravity { get; set; }
         public int CollisionPrecision { get; set; }
->>>>>>> 10b90c3c87e17538a65150fc195330729a8017d7
-        
+
         public Game1()
         {
-            for(int i = 0; i < 4; i++)
-            {
-                Debug.WriteLine(Joystick.GetCapabilities(i).ButtonCount);
-            }
+            GamePad.InitDatabase();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            
+            Debug.WriteLine(Joystick.GetState(1).IsConnected);
+
         }
 
         /// <summary>
