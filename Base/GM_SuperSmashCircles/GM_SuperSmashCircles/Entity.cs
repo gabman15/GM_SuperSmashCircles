@@ -73,6 +73,10 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public bool CollideWithEntities { get; set; }
         /// <summary>
+        /// private reference to the game
+        /// </summary>
+        private Game1 game;
+        /// <summary>
         /// constructs an entity with default values
         /// </summary>
         public Entity()
@@ -92,6 +96,7 @@ namespace GM_SuperSmashCircles
             imageName = "";
             Color = new Color(255, 255, 255);
             CollideWithPlatforms = true;
+            this.game = null;
         }
         /// <summary>
         /// constructs an entity
@@ -135,7 +140,7 @@ namespace GM_SuperSmashCircles
             Color.G = (byte)g;
         }
         /// <summary>
-        /// gets the rectangle for this entity
+        /// gets the rectangle for this entity (NOTE THAT THIS CONVERTS COORDINATE VALUES TO INTS)
         /// </summary>
         /// <returns>the rectangle for this entity</returns>
         public Rectangle GetRectangle()
@@ -156,6 +161,14 @@ namespace GM_SuperSmashCircles
             sb.Draw(Image, GetRectangle(), Color);
         }
         /// <summary>
+        /// checks if this entity is on top of ground
+        /// </summary>
+        /// <returns>if this entity is on top of ground</returns>
+        public bool OnGround()
+        {
+            return game.CheckCollision(X, Y, X + Width, Y + Height + game.CollisionPrecision);
+        }
+        /// <summary>
         /// loads an entity from a file
         /// </summary>
         /// <param name="filename">lua file name</param>
@@ -163,6 +176,7 @@ namespace GM_SuperSmashCircles
         public static Entity LoadFromFile(string filename, Game1 game)
         {
             Entity entity = new Entity();
+            entity.game = game;
             entity.State.LoadCLRPackage();
             entity.State.DoFile(filename);
             entity.State.GetFunction("OnCreation")?.Call(entity, game);

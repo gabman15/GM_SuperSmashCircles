@@ -9,7 +9,7 @@ function OnCreation(gm, g)
 end
 function OnStart()
 	Console.WriteLine("gamemode started")
-	game.YGravity = 0.5
+	game.YGravity = 0.1
 	ent = game:CreateEntity("testentity.lua")
 	plt = game:CreatePlatform("testplatform.lua")
 --	ent.Image = ContentManager.GetContent("circle");
