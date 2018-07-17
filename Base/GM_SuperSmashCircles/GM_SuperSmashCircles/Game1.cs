@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 
@@ -34,7 +33,7 @@ namespace GM_SuperSmashCircles
             GamePad.InitDatabase();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Debug.WriteLine(Joystick.GetState(1).IsConnected);
+            //Debug.WriteLine(Joystick.GetState(1).IsConnected);
 
         }
 

@@ -134,8 +134,7 @@
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-xcopy /s /y "E:\Users\Gabriel\Documents\GitHub\GM_SuperSmashCircles\Base\GM_SuperSmashCircles\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"
-xcopy /s /y "D:\Main\GithubRepositories\GM_SuperSmashCirclesLua\Base\GM_SuperSmashCircles\packages\NLua.1.3.2.1\lib\native\*.*" "$(TargetDir)"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

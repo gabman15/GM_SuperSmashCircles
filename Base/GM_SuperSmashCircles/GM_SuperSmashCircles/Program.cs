@@ -14,7 +14,7 @@ namespace GM_SuperSmashCircles
         [STAThread]
         static void Main()
         {
-            Debug.WriteLine("test");
+            //Debug.WriteLine("test");
             using (var game = new Game1())
                 game.Run();
         }
