@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
+
 namespace GM_SuperSmashCircles
 {
     /// <summary>
@@ -13,16 +14,18 @@ namespace GM_SuperSmashCircles
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
+        //[DllImport("SDL2.dll", CallingConvention= CallingConvention.Cdecl)]
         //public static extern int SDL_GameControllerAddMapping(string mappingString);
         
-
+        
         public Game1()
         {
-            GamePad.InitDatabase();
+            for(int i = 0; i < 4; i++)
+            {
+                Debug.WriteLine(Joystick.GetCapabilities(i).ButtonCount);
+            }
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Debug.WriteLine(Joystick.GetState(1).IsConnected);
             
         }
 
