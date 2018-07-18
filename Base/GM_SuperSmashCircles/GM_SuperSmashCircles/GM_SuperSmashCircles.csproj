@@ -124,7 +124,7 @@
     <None Include="player.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="testplatform.lua">
+    <None Include="platform.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="testentity.lua">

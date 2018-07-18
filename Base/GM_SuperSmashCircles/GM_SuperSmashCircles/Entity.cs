@@ -100,6 +100,7 @@ namespace GM_SuperSmashCircles
             imageName = "";
             Color = new Color(255, 255, 255);
             CollideWithPlatforms = true;
+            CollideWithEntities = false;
             Friction = 0.1;
             this.game = null;
         }
