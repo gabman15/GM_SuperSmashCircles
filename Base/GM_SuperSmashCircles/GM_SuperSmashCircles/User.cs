@@ -15,12 +15,18 @@ namespace GM_SuperSmashCircles
         public UserInputType InputType { get; set; }
         public InputModule Input { get; set; }
         public Entity Player { get; set; }
-        public User(int number, InputModule input)
+        private Game1 game;
+        public User(Game1 game, int number, InputModule input)
         {
             Number = number;
             Input = input;
+            this.game = game;
         }
-        
+        public void LinkEntity(Entity ent)
+        {
+            Player = ent;
+            Player.State.GetFunction("OnLink")?.Call(this);
+        }
     }
     public abstract class InputModule
     {
@@ -134,29 +140,31 @@ namespace GM_SuperSmashCircles
     {
         private Game1 game;
         public Lua State { get; set; }
+        public LuaFunction OnUpdate { get; set; }
         public LuaInputModule(Game1 game, string filename)
         {
-            this.game = game;
             State = new Lua();
             State.LoadCLRPackage();
             State.DoFile(filename);
             State.GetFunction("OnCreation")?.Call();
+            OnUpdate = State.GetFunction("OnUpdate");
             game.Events.On("update", () =>
             {
-                State.GetFunction("OnUpdate")?.Call();
+                OnUpdate?.Call();
             });
         }
         public override bool Get(string name)
         {
+            bool result;
             try
             {
-                bool result = (bool)State.GetFunction("GetUp")?.Call()[0];
+                result = (bool)State.GetFunction("Get")?.Call(name)[0];
             }
             catch (InvalidCastException)
             {
                 return false;
             }
-            return false;
+            return result;
         }
     }
     public enum UserInputType

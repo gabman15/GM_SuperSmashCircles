@@ -10,7 +10,7 @@ function OnCreation(en, g)
 	entity.Height = 32
 	entity.RepelAmount = 0
 	entity:SetImage("circle")
-	entity:SetColor(255, 0, 0);
+	entity:SetColor(255, 0, 0)
 end
 function OnCollision()
 	Console.WriteLine("collision")
@@ -21,6 +21,6 @@ function OnUpdate()
 --	else
 --		Console.WriteLine("flying through the air");
 --	end
-	entity.X = entity.X + entity.DX
-	entity.Y = entity.Y + entity.DY
+	--entity.X = entity.X + entity.DX
+	--entity.Y = entity.Y + entity.DY
 end

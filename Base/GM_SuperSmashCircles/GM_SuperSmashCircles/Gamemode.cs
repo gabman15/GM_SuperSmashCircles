@@ -16,12 +16,6 @@ namespace GM_SuperSmashCircles
             OnStart = null;
             OnUpdate = null;
         }
-        public void GameComplete()
-        {
-            //game is done
-            //idk what to put here for now
-            //maybe this just shouldn't be a thing
-        }
         public static Gamemode LoadFromFile(string filename, Game1 game)
         {
             Lua state = new Lua();
@@ -31,6 +25,10 @@ namespace GM_SuperSmashCircles
             state.GetFunction("OnCreation")?.Call(gamemode, game);
             gamemode.OnStart = state.GetFunction("OnStart");
             gamemode.OnUpdate = state.GetFunction("OnUpdate");
+            game.Events.On("update", () =>
+            {
+                gamemode.OnUpdate?.Call();
+            });
             return gamemode;
         }
     }

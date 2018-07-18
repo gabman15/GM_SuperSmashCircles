@@ -29,6 +29,7 @@ namespace GM_SuperSmashCircles
         public int MaxUsers { get; set; }
         public double XGravity { get; set; }
         public double YGravity { get; set; }
+        public double AirFriction { get; set; }
         public double CollisionPrecision { get; set; }
         public Game1()
         {
@@ -52,10 +53,14 @@ namespace GM_SuperSmashCircles
             MaxUsers = 4;
             XGravity = 0;
             YGravity = 0;
+            AirFriction = 0.3;
             CollisionPrecision = 1;
 
             firstStep = false;
             Users = new User[MaxUsers];
+            //--begin testing purposes--
+            Users[0] = new User(this, 0, new LeftKeyboardInputModule(this));
+            //--end testing purposes--
             Entities = new List<Entity>();
             Platforms = new List<Platform>();
             CurrentGamemode = Gamemode.LoadFromFile("gamemode_default.lua", this);
@@ -94,7 +99,7 @@ namespace GM_SuperSmashCircles
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.Four).Buttons.B == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             if(!firstStep)
@@ -105,7 +110,6 @@ namespace GM_SuperSmashCircles
 
             foreach (Entity e in Entities)
             {
-                e.OnUpdate?.Call();
                 e.DX += XGravity;
                 e.DY += YGravity;
             }
@@ -113,32 +117,88 @@ namespace GM_SuperSmashCircles
             
             foreach(Entity e in Entities)
             {
+                double fric = e.Friction;
                 //test for collisions with each platform
                 //we only care about downward collisions since these are platforms
-                bool foundCollision = false;
-                foreach(Platform p in Platforms)
+                if (e.CollideWithPlatforms)
                 {
-                    while (RectangleInRectangle(e.X, e.Y, e.X + e.Width, e.Y + e.Height + e.DY, p.X, p.Y, p.X + p.Width, p.Y + p.Height))
+                    bool foundCollision = false;
+                    List<Platform> collidedPlatforms = new List<Platform>();
+                    foreach (Platform p in Platforms)
                     {
-                        foundCollision = true;
-                        e.DY -= CollisionPrecision;
-                        if(Math.Abs(e.DY) < CollisionPrecision)
+                        if(RectangleInRectangle(e.X, e.Y, e.X + e.Width, e.Y + e.Height, p.X, p.Y, p.X + p.Width, p.Y + p.Height))
                         {
-                            e.DY = 0;
+                            //we're inside it, don't collide with it
                             break;
                         }
+                        while (RectangleInRectangle(e.X, e.Y, e.X + e.Width, e.Y + e.Height + e.DY, p.X, p.Y, p.X + p.Width, p.Y + p.Height))
+                        {
+                            foundCollision = true;
+                            collidedPlatforms.Add(p);
+                            e.DY -= CollisionPrecision;
+                            if (Math.Abs(e.DY) < CollisionPrecision)
+                            {
+                                e.DY = 0;
+                                break;
+                            }
+                        }
+
                     }
-                    
-                }
-                if (foundCollision)
-                {
-                    if (e.DY > CollisionPrecision)
+                    if (foundCollision)
                     {
-                        e.DY -= CollisionPrecision;
+                        if (e.DY > CollisionPrecision)
+                        {
+                            e.DY -= CollisionPrecision;
+                        }
+                        e.OnSolidCollision?.Call();
+                        //we know we're on ground, so use ground friction
+                        //get the average friction for all of the platforms we collided with
+                        double gFric = 0;
+                        foreach(Platform p in collidedPlatforms)
+                        {
+                            gFric += p.Friction;
+                        }
+                        gFric /= collidedPlatforms.Count;
+                        fric += gFric;
+                    }
+                    else
+                    {
+                        //we're not on the ground, so use air friction
+                        fric += AirFriction;
+                    }
+                    //apply the friction
+                    //for now we will only be caring about x-axis friction, but this can be changed in the future
+                    if (Math.Abs(e.DX) < fric)
+                    {
+                        e.DX = 0;
+                    }
+                    else
+                    {
+                        e.DX -= fric * Math.Sign(e.DX);
+                    }
+                }
+                if(e.CollideWithEntities)
+                {
+                    Rectangle eRect = e.GetRectangle();
+                    foreach(Entity target in Entities)
+                    {
+                        if(target != e)
+                        {
+                            if(eRect.Intersects(target.GetRectangle()))
+                            {
+                                e.OnEntityCollision?.Call(target);
+                                //todo: add repel code here
+                            }
+                        }
                     }
                 }
             }
-            
+            foreach (Entity e in Entities)
+            {
+                e.X += e.DX;
+                e.Y += e.DY;
+            }
+
 
 
             CurrentGamemode.OnUpdate?.Call();

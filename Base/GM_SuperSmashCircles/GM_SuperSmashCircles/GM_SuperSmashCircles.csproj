@@ -121,6 +121,9 @@
     </None>
     <None Include="app.manifest" />
     <None Include="packages.config" />
+    <None Include="player.lua">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="testplatform.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

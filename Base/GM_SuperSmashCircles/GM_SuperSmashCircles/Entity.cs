@@ -61,6 +61,10 @@ namespace GM_SuperSmashCircles
         public Texture2D Image { get; set; }
         private string imageName { get; set; }
         /// <summary>
+        /// friction of this entity
+        /// </summary>
+        public double Friction { get; set; }
+        /// <summary>
         /// color of this entity
         /// </summary>
         public Color Color;
@@ -96,6 +100,7 @@ namespace GM_SuperSmashCircles
             imageName = "";
             Color = new Color(255, 255, 255);
             CollideWithPlatforms = true;
+            Friction = 0.1;
             this.game = null;
         }
         /// <summary>
@@ -181,6 +186,10 @@ namespace GM_SuperSmashCircles
             entity.State.DoFile(filename);
             entity.State.GetFunction("OnCreation")?.Call(entity, game);
             entity.OnUpdate = entity.State.GetFunction("OnUpdate");
+            game.Events.On("update", () =>
+            {
+                entity.OnUpdate?.Call();
+            });
             entity.OnEntityCollision = entity.State.GetFunction("OnEntityCollision");
             entity.OnSolidCollision = entity.State.GetFunction("OnSolidCollision");
             return entity;

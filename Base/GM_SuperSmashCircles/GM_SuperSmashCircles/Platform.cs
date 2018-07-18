@@ -36,20 +36,24 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public LuaFunction OnCollision { get; set; }
         /// <summary>
-        /// the lua state for this entity
+        /// the lua state for this platform
         /// </summary>
         public Lua State { get; set; }
         /// <summary>
-        /// the image of this entity
+        /// the friction added to entities touching this platform
+        /// </summary>
+        public double Friction { get; set; }
+        /// <summary>
+        /// the image of this platform
         /// </summary>
         public Texture2D Image { get; set; }
         private string imageName { get; set; }
         /// <summary>
-        /// color of this entity
+        /// color of this platform
         /// </summary>
         public Color Color;
         /// <summary>
-        /// constructs an entity with default values
+        /// constructs a platform with default values
         /// </summary>
         public Platform()
         {
@@ -63,6 +67,7 @@ namespace GM_SuperSmashCircles
             Image = null;
             imageName = "";
             Color = new Color(255, 255, 255);
+            Friction = 0.5;
         }
         /// <summary>
         /// constructs an entity
