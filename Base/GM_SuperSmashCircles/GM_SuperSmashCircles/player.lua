@@ -1,8 +1,9 @@
-﻿game = nil
+﻿import("System");
+game = nil
 entity = nil
 user = nil
-movementAcceleration = 5
-maxXSpeed = 6
+movementAcceleration = 4
+maxXSpeed = 5
 maxYSpeed = 10
 jumpAmount = -9;
 jumpsLeft = 2
@@ -14,7 +15,7 @@ function OnCreation(en, g)
 	entity.Y = 64
 	entity.Width = 32
 	entity.Height = 32
-	entity.RepelAmount = 0
+	entity.RepelAmount = 0.4
 	entity.Friction = 1;
 	entity:SetImage("circle")
 	entity:SetColor(255, 0, 0)
@@ -42,12 +43,15 @@ function OnUpdate()
 			entity.CollideWithPlatforms = true
 		end
 	end
-	if entity.DY > maxYSpeed then
-		entity.DY = maxYSpeed
-	elseif entity.DY < -maxYSpeed then
-		entity.DY = -maxYSpeed
-	end
+	--wont do the following for now until there is a better way
+	--if entity.DY > maxYSpeed then
+	--	entity.DY = maxYSpeed
+	--elseif entity.DY < -maxYSpeed then
+	--	entity.DY = -maxYSpeed
+	--end
 end
 function OnSolidCollision()
 	jumpsLeft = 2
+end
+function OnEntityCollision()
 end

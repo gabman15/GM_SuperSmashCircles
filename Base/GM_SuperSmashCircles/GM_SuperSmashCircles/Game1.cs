@@ -182,12 +182,14 @@ namespace GM_SuperSmashCircles
                     Rectangle eRect = e.GetRectangle();
                     foreach(Entity target in Entities)
                     {
-                        if(target != e)
+                        if(target.CollideWithEntities && target != e)
                         {
                             if(eRect.Intersects(target.GetRectangle()))
                             {
                                 e.OnEntityCollision?.Call(target);
-                                //todo: add repel code here
+                                //repel
+                                int side = Math.Sign(e.X - target.X); //negative -> left, positive -> right
+                                e.DX += target.RepelAmount * side;
                             }
                         }
                     }

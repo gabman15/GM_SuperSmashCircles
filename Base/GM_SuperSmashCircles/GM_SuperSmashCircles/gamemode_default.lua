@@ -12,12 +12,15 @@ function OnStart()
 	game.YGravity = 0.5
 	game.AirFriction = 0
 	ent = game:CreateEntity("player.lua")
+	ent:SetColor(0,255,0)
+	game.Users:GetValue(0):LinkEntity(ent)
+	ent = game:CreateEntity("testentity.lua")
+	ent.X = ent.X + 128
 	plt = game:CreatePlatform("platform.lua")
 	plt.Width = 256
 	plt = game:CreatePlatform("platform.lua")
 	plt.Width = 288
 	plt.Y = plt.Y - 128
-	game.Users:GetValue(0):LinkEntity(ent)
 end
 function OnUpdate()
 	--Console.WriteLine("update")
