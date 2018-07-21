@@ -1,42 +1,82 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-
 
 namespace GM_SuperSmashCircles
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class SSCGame : Game
     {
+        /// <summary>
+        /// graphics device manager for the game
+        /// </summary>
         private GraphicsDeviceManager graphics;
+        /// <summary>
+        /// sprite batch for drawing things in the game
+        /// </summary>
         private SpriteBatch spriteBatch;
 
+        /// <summary>
+        /// if we have not just switched to a gamemode
+        /// </summary>
         private bool firstStep;
 
         //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
         //public static extern int SDL_GameControllerAddMapping(string mappingString);
+        /// <summary>
+        /// list of all of the entities in the game
+        /// </summary>
         public List<Entity> Entities { get; set; }
+        /// <summary>
+        /// list of all the users in the game
+        /// </summary>
         public User[] Users { get; set; }
+        /// <summary>
+        /// list of all the platforms in the game
+        /// </summary>
         public List<Platform> Platforms { get; set; }
+        /// <summary>
+        /// the current gamemode
+        /// </summary>
         public Gamemode CurrentGamemode { get; set; }
 
+        /// <summary>
+        /// event emitter for the game
+        /// </summary>
         public EventEmitter Events { get; set; }
 
+        /// <summary>
+        /// maximum number of users
+        /// </summary>
         public int MaxUsers { get; set; }
+        /// <summary>
+        /// gravity on the x axis
+        /// </summary>
         public double XGravity { get; set; }
+        /// <summary>
+        /// gravity on the y axis
+        /// </summary>
         public double YGravity { get; set; }
+        /// <summary>
+        /// friction when entity is not colliding with a platform
+        /// </summary>
         public double AirFriction { get; set; }
+        /// <summary>
+        /// how precise collision checks are
+        /// </summary>
         public double CollisionPrecision { get; set; }
-        public Game1()
+        /// <summary>
+        /// make a new game object
+        /// </summary>
+        public SSCGame()
         {
-            GamePad.InitDatabase();
+            //GamePad.InitDatabase(); //what is this
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //Debug.WriteLine(Joystick.GetState(1).IsConnected);
 
             Events = new EventEmitter();
 
@@ -232,6 +272,18 @@ namespace GM_SuperSmashCircles
             base.Draw(gameTime);
             //Events.Emit("draw");
         }
+        /// <summary>
+        /// checks if a given rectangle is in another given rectangle
+        /// </summary>
+        /// <param name="ax1">first rectangle top left x coordinate</param>
+        /// <param name="ay1">first rectangle top left y coordinate</param>
+        /// <param name="ax2">first rectangle bottom right x coordinate</param>
+        /// <param name="ay2">first rectangle bottom right y coordinate</param>
+        /// <param name="bx1">second rectangle top left x coordinate</param>
+        /// <param name="by1">second rectangle top left y coordinate</param>
+        /// <param name="bx2">second rectangle bottom right x coordinate</param>
+        /// <param name="by2">second rectangle bottom right y coordinate</param>
+        /// <returns>if the two given rectangles intersect</returns>
         public bool RectangleInRectangle(double ax1, double ay1, double ax2, double ay2, double bx1, double by1, double bx2, double by2)
         {
             //make sure the 1s are top left corner, and the 2s are bottom right corner of their corresponding rectangles
@@ -261,18 +313,36 @@ namespace GM_SuperSmashCircles
             }
             return ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1;
         }
+        /// <summary>
+        /// creates a lua-based entity from the given filename
+        /// </summary>
+        /// <param name="filename">name of the lua file to load</param>
+        /// <returns>the created entity</returns>
         public Entity CreateEntity(string filename)
         {
             Entity entity = Entity.LoadFromFile(filename, this);
             Entities.Add(entity);
             return entity;
         }
+        /// <summary>
+        /// creates a lua-based platform from the given filename
+        /// </summary>
+        /// <param name="filename">the name of the lua file to load</param>
+        /// <returns>the created platform</returns>
         public Platform CreatePlatform(string filename)
         {
             Platform platform = Platform.LoadFromFile(filename, this);
             Platforms.Add(platform);
             return platform;
         }
+        /// <summary>
+        /// checks collision of the given rectangle with all of the instances of platforms in the game
+        /// </summary>
+        /// <param name="x1">top left x coordinate of the rectangle</param>
+        /// <param name="y1">top left y coordinate of the rectangle</param>
+        /// <param name="x2">bottom right x coordinate of the rectangle</param>
+        /// <param name="y2">bottom right y coordinate of the rectangle</param>
+        /// <returns>if the given rectangle intersects with any of the existing platforms</returns>
         public bool CheckCollision(double x1, double y1, double x2, double y2)
         {
             foreach (Platform p in Platforms)

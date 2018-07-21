@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLua;
+﻿using NLua;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace GM_SuperSmashCircles
 {
+    /// <summary>
+    /// a platform
+    /// </summary>
     public class Platform
     {
         /// <summary>
@@ -97,16 +95,30 @@ namespace GM_SuperSmashCircles
             }
             imageName = name;
         }
+        /// <summary>
+        /// sets the color of this platform
+        /// </summary>
+        /// <param name="r">the red value (0 - 255)</param>
+        /// <param name="g">the green value (0 - 255)</param>
+        /// <param name="b">the blue value (0 - 255)</param>
         public void SetColor(int r, int g, int b)
         {
             Color.R = (byte)r;
             Color.B = (byte)b;
             Color.G = (byte)g;
         }
+        /// <summary>
+        /// gets the rectangle for this platform (NOTE THAT THIS CONVERTS COORDINATE VALUES TO INTS)
+        /// </summary>
+        /// <returns>the rectangle for this platform</returns>
         public Rectangle GetRectangle()
         {
             return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
         }
+        /// <summary>
+        /// draws the platform
+        /// </summary>
+        /// <param name="sb">the sprite batch to draw to</param>
         public void Draw(SpriteBatch sb)
         {
             if(Image == null)
@@ -121,7 +133,7 @@ namespace GM_SuperSmashCircles
         /// </summary>
         /// <param name="filename">lua file name</param>
         /// <returns>the platform from the file</returns>
-        public static Platform LoadFromFile(string filename, Game1 game)
+        public static Platform LoadFromFile(string filename, SSCGame game)
         {
             Platform platform = new Platform();
             platform.State.LoadCLRPackage();

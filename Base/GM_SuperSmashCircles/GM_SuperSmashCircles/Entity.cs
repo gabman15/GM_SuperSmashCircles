@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLua;
+﻿using NLua;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
@@ -79,7 +74,7 @@ namespace GM_SuperSmashCircles
         /// <summary>
         /// private reference to the game
         /// </summary>
-        private Game1 game;
+        private SSCGame game;
         /// <summary>
         /// constructs an entity with default values
         /// </summary>
@@ -136,9 +131,9 @@ namespace GM_SuperSmashCircles
         /// <summary>
         /// sets the color of this entity
         /// </summary>
-        /// <param name="r">red value</param>
-        /// <param name="g">green value</param>
-        /// <param name="b">blue value</param>
+        /// <param name="r">the red value (0 - 255)</param>
+        /// <param name="g">the green value (0 - 255)</param>
+        /// <param name="b">the blue value (0 - 255)</param>
         public void SetColor(int r, int g, int b)
         {
             Color.R = (byte)r;
@@ -179,7 +174,7 @@ namespace GM_SuperSmashCircles
         /// </summary>
         /// <param name="filename">lua file name</param>
         /// <returns>the entity from the file</returns>
-        public static Entity LoadFromFile(string filename, Game1 game)
+        public static Entity LoadFromFile(string filename, SSCGame game)
         {
             Entity entity = new Entity();
             entity.game = game;

@@ -1,22 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLua;
+﻿using NLua;
 
 namespace GM_SuperSmashCircles
 {
+    /// <summary>
+    /// controls the current gamemode
+    /// </summary>
     public class Gamemode
     {
+        /// <summary>
+        /// lua function to call when gamemode starts
+        /// </summary>
         public LuaFunction OnStart { get; set; }
+        /// <summary>
+        /// lua function to call on game update
+        /// </summary>
         public LuaFunction OnUpdate { get; set; }
+        /// <summary>
+        /// creates a basic gamemode
+        /// </summary>
         public Gamemode()
         {
             OnStart = null;
             OnUpdate = null;
         }
-        public static Gamemode LoadFromFile(string filename, Game1 game)
+        /// <summary>
+        /// loads a gamemode from a lua file
+        /// </summary>
+        /// <param name="filename">the lua file to load the gamemode from</param>
+        /// <param name="game">the game</param>
+        /// <returns>the created gamemode</returns>
+        public static Gamemode LoadFromFile(string filename, SSCGame game)
         {
             Lua state = new Lua();
             state.LoadCLRPackage();

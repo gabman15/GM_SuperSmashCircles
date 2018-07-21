@@ -25,19 +25,19 @@ function OnLink(u)
 end
 function OnUpdate()
 	if user ~= nil then
-		if entity.DX < maxXSpeed and user.Input:GetRight() then
+		if entity.DX < maxXSpeed and user.Input:Get("right") then
 			entity.DX = entity.DX + movementAcceleration
 		end
-		if entity.DX > -maxXSpeed and user.Input:GetLeft() then
+		if entity.DX > -maxXSpeed and user.Input:Get("left") then
 			entity.DX = entity.DX - movementAcceleration
 		end
-		jump = user.Input:GetJump()
+		jump = user.Input:Get("jump")
 		if jump and not jumpPressedLast and jumpsLeft > 0 then
 			entity.DY = jumpAmount
 			jumpsLeft = jumpsLeft - 1
 		end
 		jumpPressedLast = jump
-		if user.Input:GetDown() then
+		if user.Input:Get("down") then
 			entity.CollideWithPlatforms = false
 		else
 			entity.CollideWithPlatforms = true

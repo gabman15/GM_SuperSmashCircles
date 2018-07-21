@@ -1,22 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GM_SuperSmashCircles
 {
+    /// <summary>
+    /// allows triggering of events and adding listeners to events
+    /// </summary>
     public class EventEmitter
     {
+        /// <summary>
+        /// list of event listeners
+        /// </summary>
         private List<EventListener> listeners;
+        /// <summary>
+        /// creates an new event emitter
+        /// </summary>
         public EventEmitter()
         {
             listeners = new List<EventListener>();
         }
-        public void On(string name, Action function)
+        /// <summary>
+        /// adds an event listener
+        /// </summary>
+        /// <param name="name">name of the event to listen to</param>
+        /// <param name="function">the function to be called when the event is triggered</param>
+        /// <returns>the created event listener</returns>
+        public EventListener On(string name, Action function)
         {
-            listeners.Add(new EventListener(name, function));
+            EventListener el = new EventListener(name, function);
+            listeners.Add(el);
+            return el;
         }
+        /// <summary>
+        /// trigger an event
+        /// </summary>
+        /// <param name="name">the name of the event</param>
         public void Emit(string name)
         {
             foreach(EventListener l in listeners)
@@ -27,16 +45,5 @@ namespace GM_SuperSmashCircles
                 }
             }
         }
-    }
-    public class EventListener
-    {
-        public string Name { get; set; }
-        public Action Function { get; set; }
-        public EventListener(string name, Action func)
-        {
-            Name = name;
-            Function = func;
-        }
-
     }
 }

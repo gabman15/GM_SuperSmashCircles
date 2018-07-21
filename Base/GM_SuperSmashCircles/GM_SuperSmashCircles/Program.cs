@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace GM_SuperSmashCircles
 {
@@ -15,7 +14,7 @@ namespace GM_SuperSmashCircles
         static void Main()
         {
             //Debug.WriteLine("test");
-            using (var game = new Game1())
+            using (var game = new SSCGame())
                 game.Run();
         }
     }
