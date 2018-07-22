@@ -47,10 +47,15 @@
   <ItemGroup>
     <Compile Include="ContentManager.cs" />
     <Compile Include="EventListener.cs" />
+    <Compile Include="Input\GamepadStickInputItem.cs" />
+    <Compile Include="Input\KeyboardButtonInputItem.cs" />
+    <Compile Include="Input\GamepadButtonInputItem.cs" />
+    <Compile Include="Input\IInputItem.cs" />
     <Compile Include="Input\InputModule.cs" />
     <Compile Include="Input\KeyboardInputModule.cs" />
     <Compile Include="Input\LeftKeyboardInputModule.cs" />
     <Compile Include="Input\LuaInputModule.cs" />
+    <Compile Include="Input\MultiInputItem.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EventEmitter.cs" />
@@ -60,7 +65,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
-    <Compile Include="Input\XBOneInputModule.cs" />
+    <Compile Include="Input\GamepadInputModule.cs" />
     <Compile Include="UserInterface\UIElement.cs" />
     <Compile Include="UserInterface\LuaUIElement.cs" />
   </ItemGroup>

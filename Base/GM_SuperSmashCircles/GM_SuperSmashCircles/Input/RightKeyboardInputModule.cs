@@ -14,22 +14,14 @@ namespace GM_SuperSmashCircles.Input
         /// <param name="game">a reference to the game</param>
         public RightKeyboardInputModule(SSCGame game) : base(game)
         {
-            KeyboardControls = new Dictionary<string, Keys>();
-            KeyboardControls.Add("jump", Keys.Multiply);
-            KeyboardControls.Add("up", Keys.Up);
-            KeyboardControls.Add("down", Keys.Down);
-            KeyboardControls.Add("left", Keys.Left);
-            KeyboardControls.Add("right", Keys.Right);
-            KeyboardControls.Add("dash", Keys.Add);
-            KeyboardControls.Add("special", Keys.Subtract);
-        }
-        /// <summary>
-        /// gets the name of this input module
-        /// </summary>
-        /// <returns>the name of this input module</returns>
-        public override string GetName()
-        {
-            return "Right Keyboard";
+            Name = "Right Keyboard";
+            InputItems.Add("jump", new KeyboardButtonInputItem(Keys.Multiply, game));
+            InputItems.Add("up", new KeyboardButtonInputItem(Keys.Up, game));
+            InputItems.Add("down", new KeyboardButtonInputItem(Keys.Down, game));
+            InputItems.Add("left", new KeyboardButtonInputItem(Keys.Left, game));
+            InputItems.Add("right", new KeyboardButtonInputItem(Keys.Right, game));
+            InputItems.Add("dash", new KeyboardButtonInputItem(Keys.Add, game));
+            InputItems.Add("special", new KeyboardButtonInputItem(Keys.Subtract, game));
         }
     }
 }

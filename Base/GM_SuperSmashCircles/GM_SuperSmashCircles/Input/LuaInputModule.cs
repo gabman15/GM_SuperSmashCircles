@@ -36,6 +36,7 @@ namespace GM_SuperSmashCircles.Input
         public LuaInputModule(SSCGame game, string filename)
         {
             luaInputModuleNum = highestLuaInputModuleNumber++;
+            Name = "Lua-" + Convert.ToString(luaInputModuleNum);
             State = new Lua();
             State.LoadCLRPackage();
             State.DoFile(filename);
@@ -58,19 +59,11 @@ namespace GM_SuperSmashCircles.Input
             {
                 result = (bool)State.GetFunction("Get")?.Call(name)[0];
             }
-            catch (InvalidCastException)
+            catch
             {
-                return false;
+                result = false;
             }
             return result;
-        }
-        /// <summary>
-        /// gets the name of this input module
-        /// </summary>
-        /// <returns>the name of this input module</returns>
-        public override string GetName()
-        {
-            return "Lua-" + Convert.ToString(luaInputModuleNum);
         }
     }
 }

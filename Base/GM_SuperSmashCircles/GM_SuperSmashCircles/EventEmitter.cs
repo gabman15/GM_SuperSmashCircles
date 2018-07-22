@@ -37,9 +37,14 @@ namespace GM_SuperSmashCircles
         /// <param name="name">the name of the event</param>
         public void Emit(string name)
         {
-            foreach(EventListener l in listeners)
+            for (int i = listeners.Count - 1; i >= 0; i--)
             {
-                if(l.Name.Equals(name))
+                EventListener l = listeners[i];
+                if(l.Destroy)
+                {
+                    listeners.RemoveAt(i);
+                }
+                else if (l.Name.Equals(name))
                 {
                     l.Function.Invoke();
                 }

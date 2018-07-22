@@ -39,6 +39,12 @@ namespace GM_SuperSmashCircles
         /// list of all the platforms in the game
         /// </summary>
         public List<Platform> Platforms { get; set; }
+
+        internal GamePadState GetGamepadState(PlayerIndex player)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// list of ui elements to draw
         /// </summary>
@@ -117,10 +123,10 @@ namespace GM_SuperSmashCircles
             PossibleInputModules = new List<InputModule>();
             PossibleInputModules.Add(new LeftKeyboardInputModule(this));
             PossibleInputModules.Add(new RightKeyboardInputModule(this));
-            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.One));
-            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Two));
-            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Three));
-            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Four));
+            PossibleInputModules.Add(new GamepadInputModule(this, PlayerIndex.One));
+            PossibleInputModules.Add(new GamepadInputModule(this, PlayerIndex.Two));
+            PossibleInputModules.Add(new GamepadInputModule(this, PlayerIndex.Three));
+            PossibleInputModules.Add(new GamepadInputModule(this, PlayerIndex.Four));
             PossibleInputs = new List<string>();
             PossibleInputs.Add("jump");
             PossibleInputs.Add("up");
@@ -293,7 +299,7 @@ namespace GM_SuperSmashCircles
                 {
                     User user = new User(this, Users.Count + 1, mod);
                     Users.Add(user);
-                    Console.WriteLine("created new user with module " + mod.GetName());
+                    Console.WriteLine("created new user with module " + mod.Name);
                     CurrentGamemode.OnNewUser?.Call(user);
                 }
             }

@@ -16,6 +16,10 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public Action Function { get; set; }
         /// <summary>
+        /// if we want to get rid of this listener
+        /// </summary>
+        public bool Destroy { get; set; }
+        /// <summary>
         /// creates a new event listener
         /// </summary>
         /// <param name="name">name of the event to listen to</param>
