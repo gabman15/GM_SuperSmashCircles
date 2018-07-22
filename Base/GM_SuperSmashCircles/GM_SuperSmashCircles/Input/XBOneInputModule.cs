@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
-namespace GM_SuperSmashCircles
+namespace GM_SuperSmashCircles.Input
 {
     /// <summary>
     /// an input module for an xbox one controller (possibly works with a 360 controller)
@@ -63,6 +64,14 @@ namespace GM_SuperSmashCircles
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// gets the name of this input module
+        /// </summary>
+        /// <returns>the name of this input module</returns>
+        public override string GetName()
+        {
+            return "X-Box One Controller Player " + Convert.ToString((int)Player + 1);
         }
     }
 }

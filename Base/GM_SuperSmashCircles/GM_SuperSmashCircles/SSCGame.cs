@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using GM_SuperSmashCircles.Input;
+using GM_SuperSmashCircles.UserInterface;
 
 namespace GM_SuperSmashCircles
 {
@@ -25,8 +27,6 @@ namespace GM_SuperSmashCircles
         /// </summary>
         private bool firstStep;
 
-        //DllImport(NativeLibName, CallingConvention= CallingConvention.Cdecl);
-        //public static extern int SDL_GameControllerAddMapping(string mappingString);
         /// <summary>
         /// list of all of the entities in the game
         /// </summary>
@@ -34,11 +34,15 @@ namespace GM_SuperSmashCircles
         /// <summary>
         /// list of all the users in the game
         /// </summary>
-        public User[] Users { get; set; }
+        public List<User> Users { get; set; }
         /// <summary>
         /// list of all the platforms in the game
         /// </summary>
         public List<Platform> Platforms { get; set; }
+        /// <summary>
+        /// list of ui elements to draw
+        /// </summary>
+        public List<UIElement> UIElements { get; set; }
         /// <summary>
         /// the current gamemode
         /// </summary>
@@ -70,6 +74,22 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public double CollisionPrecision { get; set; }
         /// <summary>
+        /// whether to listen for users trying to join
+        /// </summary>
+        public bool ListenForUsers { get; set; }
+        /// <summary>
+        /// list of possible input modules that can be used
+        /// </summary>
+        public List<InputModule> PossibleInputModules { get; set; }
+        /// <summary>
+        /// list of inputs that can be used to trigger an input module
+        /// </summary>
+        public List<string> PossibleInputs { get; set; }
+        /// <summary>
+        /// list of colors to use for players
+        /// </summary>
+        public List<Color> UserColorOrder { get; set; }
+        /// <summary>
         /// make a new game object
         /// </summary>
         public SSCGame()
@@ -79,7 +99,6 @@ namespace GM_SuperSmashCircles
             Content.RootDirectory = "Content";
 
             Events = new EventEmitter();
-
         }
 
         /// <summary>
@@ -95,14 +114,40 @@ namespace GM_SuperSmashCircles
             YGravity = 0;
             AirFriction = 0.3;
             CollisionPrecision = 1;
-
+            PossibleInputModules = new List<InputModule>();
+            PossibleInputModules.Add(new LeftKeyboardInputModule(this));
+            PossibleInputModules.Add(new RightKeyboardInputModule(this));
+            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.One));
+            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Two));
+            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Three));
+            PossibleInputModules.Add(new XBOneInputModule(this, PlayerIndex.Four));
+            PossibleInputs = new List<string>();
+            PossibleInputs.Add("jump");
+            PossibleInputs.Add("up");
+            PossibleInputs.Add("down");
+            PossibleInputs.Add("left");
+            PossibleInputs.Add("right");
+            PossibleInputs.Add("dash");
+            PossibleInputs.Add("special");
+            UserColorOrder = new List<Color>();
+            UserColorOrder.Add(Color.Red);
+            UserColorOrder.Add(Color.Blue);
+            UserColorOrder.Add(Color.Green);
+            UserColorOrder.Add(Color.Yellow);
+            UserColorOrder.Add(Color.Purple);
+            UserColorOrder.Add(Color.Cyan);
+            UserColorOrder.Add(Color.Orange);
+            UserColorOrder.Add(Color.White);
+            UserColorOrder.Add(Color.Black);
+            ListenForUsers = true;
             firstStep = false;
-            Users = new User[MaxUsers];
-            //--begin testing purposes--
-            Users[0] = new User(this, 0, new LeftKeyboardInputModule(this));
-            //--end testing purposes--
+            Users = new List<User>();
             Entities = new List<Entity>();
             Platforms = new List<Platform>();
+            UIElements = new List<UIElement>();
+            //--begin testing purposes--
+            //Users.Add(new User(this, 0, new LeftKeyboardInputModule(this)));
+            //--end testing purposes--
             CurrentGamemode = Gamemode.LoadFromFile("gamemode_default.lua", this);
             base.Initialize();
 
@@ -241,8 +286,17 @@ namespace GM_SuperSmashCircles
                 e.Y += e.DY;
             }
 
-
-
+            if(ListenForUsers)
+            {
+                InputModule mod = GetInputModule();
+                if(mod != null)
+                {
+                    User user = new User(this, Users.Count + 1, mod);
+                    Users.Add(user);
+                    Console.WriteLine("created new user with module " + mod.GetName());
+                    CurrentGamemode.OnNewUser?.Call(user);
+                }
+            }
             CurrentGamemode.OnUpdate?.Call();
 
             base.Update(gameTime);
@@ -267,10 +321,33 @@ namespace GM_SuperSmashCircles
             {
                 p.Draw(spriteBatch);
             }
+            foreach(UIElement elem in UIElements)
+            {
+                elem.Draw(spriteBatch);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);
             //Events.Emit("draw");
+        }
+        /// <summary>
+        /// gets the input module currently being pressed
+        /// </summary>
+        /// <returns>the input module currently being pressed, null if none</returns>
+        public InputModule GetInputModule()
+        {
+            foreach(InputModule mod in PossibleInputModules)
+            {
+                foreach(string name in PossibleInputs)
+                {
+                    if(mod.Get(name))
+                    {
+                        PossibleInputModules.Remove(mod);
+                        return mod;
+                    }
+                }
+            }
+            return null;
         }
         /// <summary>
         /// checks if a given rectangle is in another given rectangle

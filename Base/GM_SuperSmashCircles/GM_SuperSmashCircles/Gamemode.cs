@@ -16,6 +16,10 @@ namespace GM_SuperSmashCircles
         /// </summary>
         public LuaFunction OnUpdate { get; set; }
         /// <summary>
+        /// lua function to call when a new user joins
+        /// </summary>
+        public LuaFunction OnNewUser { get; set; }
+        /// <summary>
         /// creates a basic gamemode
         /// </summary>
         public Gamemode()
@@ -42,6 +46,7 @@ namespace GM_SuperSmashCircles
             {
                 gamemode.OnUpdate?.Call();
             });
+            gamemode.OnNewUser = state.GetFunction("OnNewUser");
             return gamemode;
         }
     }

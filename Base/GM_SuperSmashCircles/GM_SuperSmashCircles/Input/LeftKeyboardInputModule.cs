@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-namespace GM_SuperSmashCircles
+namespace GM_SuperSmashCircles.Input
 {
     /// <summary>
     /// a left side of the keyboard input module
@@ -22,6 +22,14 @@ namespace GM_SuperSmashCircles
             KeyboardControls.Add("right", Keys.D);
             KeyboardControls.Add("dash", Keys.H);
             KeyboardControls.Add("special", Keys.J);
+        }
+        /// <summary>
+        /// gets the name of this input module
+        /// </summary>
+        /// <returns>the name of this input module</returns>
+        public override string GetName()
+        {
+            return "Left Keyboard";
         }
     }
 }

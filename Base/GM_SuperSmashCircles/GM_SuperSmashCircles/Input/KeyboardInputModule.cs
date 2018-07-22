@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-namespace GM_SuperSmashCircles
+using System;
+
+namespace GM_SuperSmashCircles.Input
 {
     /// <summary>
     /// an input module for the keyboard
@@ -47,6 +49,14 @@ namespace GM_SuperSmashCircles
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// gets the name of this input module
+        /// </summary>
+        /// <returns>the name of this input module</returns>
+        public override string GetName()
+        {
+            return "Keyboard";
         }
     }
 }

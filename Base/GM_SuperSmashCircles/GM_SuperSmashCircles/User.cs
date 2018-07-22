@@ -1,4 +1,6 @@
-﻿namespace GM_SuperSmashCircles
+﻿using GM_SuperSmashCircles.Input;
+
+namespace GM_SuperSmashCircles
 {
     /// <summary>
     /// represents a user in the game
@@ -9,10 +11,6 @@
         /// the number of the user
         /// </summary>
         public int Number { get; set; }
-        /// <summary>
-        /// the user's input type (delete this?)
-        /// </summary>
-        public UserInputType InputType { get; set; }
         /// <summary>
         /// input module for this user
         /// </summary>
@@ -46,9 +44,5 @@
             Player = ent;
             Player.State.GetFunction("OnLink")?.Call(this);
         }
-    }
-    public enum UserInputType
-    {
-        KeyboardLeft, KeyboardRight, XBOne, Lua
     }
 }

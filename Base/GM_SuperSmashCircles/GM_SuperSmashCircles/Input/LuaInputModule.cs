@@ -1,13 +1,21 @@
 ﻿using NLua;
 using System;
 
-namespace GM_SuperSmashCircles
+namespace GM_SuperSmashCircles.Input
 {
     /// <summary>
     /// input module based in lua code
     /// </summary>
     public class LuaInputModule : InputModule
     {
+        /// <summary>
+        /// number of lua input modules created
+        /// </summary>
+        private static int highestLuaInputModuleNumber = 0;
+        /// <summary>
+        /// the number of this lua input module
+        /// </summary>
+        private int luaInputModuleNum;
         /// <summary>
         /// a private reference to the game
         /// </summary>
@@ -27,6 +35,7 @@ namespace GM_SuperSmashCircles
         /// <param name="filename">the lua file's name to load the lua input module from</param>
         public LuaInputModule(SSCGame game, string filename)
         {
+            luaInputModuleNum = highestLuaInputModuleNumber++;
             State = new Lua();
             State.LoadCLRPackage();
             State.DoFile(filename);
@@ -54,6 +63,14 @@ namespace GM_SuperSmashCircles
                 return false;
             }
             return result;
+        }
+        /// <summary>
+        /// gets the name of this input module
+        /// </summary>
+        /// <returns>the name of this input module</returns>
+        public override string GetName()
+        {
+            return "Lua-" + Convert.ToString(luaInputModuleNum);
         }
     }
 }
