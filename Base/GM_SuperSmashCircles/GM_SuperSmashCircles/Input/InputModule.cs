@@ -25,7 +25,7 @@ namespace GM_SuperSmashCircles.Input
         /// </summary>
         /// <param name="name">name of the input to check</param>
         /// <returns>if the given input is on</returns>
-        public virtual bool Get(string name)
+        public bool Get(string name)
         {
             try
             {

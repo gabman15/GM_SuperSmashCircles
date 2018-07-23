@@ -54,6 +54,7 @@
     <Compile Include="Input\InputModule.cs" />
     <Compile Include="Input\KeyboardInputModule.cs" />
     <Compile Include="Input\LeftKeyboardInputModule.cs" />
+    <Compile Include="Input\LuaFractionalInputItem.cs" />
     <Compile Include="Input\LuaInputModule.cs" />
     <Compile Include="Input\MultiInputItem.cs" />
     <Compile Include="Platform.cs" />
@@ -139,6 +140,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
+    <None Include="luainput_template.lua" />
     <None Include="packages.config" />
     <None Include="player.lua">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

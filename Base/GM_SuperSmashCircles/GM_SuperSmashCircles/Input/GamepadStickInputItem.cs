@@ -55,12 +55,10 @@ namespace GM_SuperSmashCircles.Input
             float val = getStickVal();
             if(Deadzone > 0)
             {
-                Console.WriteLine("{0} > {1}", val, Deadzone);
                 return val > Deadzone;
             }
             else
             {
-                Console.WriteLine("{0} < {1}", val, Deadzone);
                 return val < Deadzone;
             }
         }

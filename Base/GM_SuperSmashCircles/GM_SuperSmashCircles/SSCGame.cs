@@ -436,5 +436,19 @@ namespace GM_SuperSmashCircles
             }
             return false;
         }
+        /// <summary>
+        /// merges input items together (ease of access)
+        /// </summary>
+        /// <param name="items">the items to merge</param>
+        /// <returns>the merged input item</returns>
+        public static MultiInputItem MergeInputItems(params IInputItem[] items)
+        {
+            MultiInputItem newItem = new MultiInputItem();
+            foreach(IInputItem item in items)
+            {
+                newItem.InputItems.Add(item);
+            }
+            return newItem;
+        }
     }
 }

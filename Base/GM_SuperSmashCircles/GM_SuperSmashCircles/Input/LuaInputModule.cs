@@ -29,6 +29,10 @@ namespace GM_SuperSmashCircles.Input
         /// </summary>
         public LuaFunction OnUpdate { get; set; }
         /// <summary>
+        /// gets the input value
+        /// </summary>
+        public LuaFunction DoGet { get; set; }
+        /// <summary>
         /// creates a new lua-based input module
         /// </summary>
         /// <param name="game">a reference to the game</param>
@@ -40,30 +44,23 @@ namespace GM_SuperSmashCircles.Input
             State = new Lua();
             State.LoadCLRPackage();
             State.DoFile(filename);
-            State.GetFunction("OnCreation")?.Call();
+            State.GetFunction("OnCreation")?.Call(this, game);
             OnUpdate = State.GetFunction("OnUpdate");
             game.Events.On("update", () =>
             {
                 OnUpdate?.Call();
             });
+            DoGet = State.GetFunction("Get");
+            
         }
         /// <summary>
-        /// checks from the lua state if the given input is pressed
+        /// ease of access for creating lua inputs (especially when adding from lua code)
         /// </summary>
-        /// <param name="name">name of the input to check</param>
-        /// <returns>if the given input is pressed</returns>
-        public override bool Get(string name)
+        /// <param name="name">name of the input</param>
+        /// <param name="deadzone">deadzone of the input for fractional input</param>
+        public LuaFractionalInputItem GenerateLuaInput(string name, double deadzone)
         {
-            bool result;
-            try
-            {
-                result = (bool)State.GetFunction("Get")?.Call(name)[0];
-            }
-            catch
-            {
-                result = false;
-            }
-            return result;
+            return new LuaFractionalInputItem(DoGet, name, deadzone);
         }
     }
 }
