@@ -103,7 +103,6 @@ namespace GM_SuperSmashCircles
             //GamePad.InitDatabase(); //what is this
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
             Events = new EventEmitter();
         }
 
